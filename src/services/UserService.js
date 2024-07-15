@@ -1,24 +1,23 @@
 const User = require('../models/TaiKhoan');
 const bcrypt = require('bcrypt'); // Corrected typo
 const { generalAccessToken, generalRefreshToken } = require('./JwtService');
-const { get } = require('mongoose');
 
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
-        const { Tentk, Email, Matkhau, Xacnhanmatkhau } = newUser;
+        const { Tentk, Email, Matkhau } = newUser;
         try {
             const checkUser = await User.findOne({ Tentk: Tentk });
             const checkEmail = await User.findOne({ Email: Email });
 
             if (checkUser !== null) {
                 resolve({
-                    status: "OK",
+                    status: "ERR",
                     message: 'The username is already taken'
                 });
             }
             if (checkEmail !== null) {
                 resolve({
-                    status: "OK",
+                    status: "ERR",
                     message: 'The email is already registered'
                 });
             }
@@ -44,13 +43,13 @@ const createUser = (newUser) => {
 
 const loginUser = (userLogin) => {
     return new Promise(async (resolve, reject) => {
-        const { Tentk, Email, Matkhau } = userLogin;
+        const { Email, Matkhau } = userLogin;
         try {
             const checkUser = await User.findOne({ Email: Email });
 
             if (checkUser === null) {
                 resolve({
-                    status: "OK",
+                    status: "ERR",
                     message: 'User not found'
                 });
             }
@@ -59,7 +58,7 @@ const loginUser = (userLogin) => {
 
             if (!comparePassword) {
                 resolve({
-                    status: "OK",
+                    status: "ERR",
                     message: 'Incorrect password'
                 });
             }

@@ -12,7 +12,7 @@ const authMiddleware = (req, res) => {
             })
         }
         const { payload } = user
-        if (payload?.MaNV != null) {
+        if (user?.MaNV != null) {
             next()
         }
         else {
@@ -24,7 +24,7 @@ const authMiddleware = (req, res) => {
     })
 }
 
-const authUserMiddleware = (req, res) => {
+const authUserMiddleware = (req, res, next) => {
     const token = req.headers.token.split(' ')[1]
     const userId = req.params.id
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, user) {
@@ -34,8 +34,7 @@ const authUserMiddleware = (req, res) => {
                 message: 'The authemtication'
             })
         }
-        const { payload } = user
-        if (payload?.MaNV !== null || payload?.id === userId) {
+        if (user?.MaNV !== null || user?.id === userId) {
             next()
         }
         else {

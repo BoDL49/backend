@@ -1,6 +1,6 @@
-const { get } = require('mongoose')
 const UserService = require('../services/UserService')
 const JwtService = require('../services/JwtService')
+const TaiKhoan = require('../models/TaiKhoan')
 
 const createUser = async (req, res) => {
     try {
@@ -34,10 +34,10 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        const { Tentk, Email, Matkhau } = req.body
+        const { Email, Matkhau } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         const isCheckEmail = reg.test(Email)
-        if (!Tentk || !Email || !Matkhau) {
+        if (!Email || !Matkhau) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
@@ -49,7 +49,12 @@ const loginUser = async (req, res) => {
             })
         }
         const result = await UserService.loginUser(req.body);
-        return res.status(200).json(result);
+        const { refresh_token, ...newResult } = result
+        res.cookie('refresh_token', refresh_token, {
+            HttpOnly: true,
+            Secure: true,
+        })
+        return res.status(200).json(newResult);
     } catch (err) {
         return res.status(404).json({
             message: err.message
@@ -126,7 +131,7 @@ const getDetailUser = async (req, res) => {
 
 const refreshToken = async (req, res) => {
     try {
-        const token = req.headers.token.split(' ')[1]
+        const token = req.cookies.refresh_token
         if (!token) {
             return res.status(200).json({
                 status: 'ERR',

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const routes = require('./routes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bodyCookie = require('cookie-parser');
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const port = process.env.PORT || 3001;
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(bodyCookie())
 
 routes(app);
 
