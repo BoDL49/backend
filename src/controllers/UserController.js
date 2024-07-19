@@ -51,8 +51,9 @@ const loginUser = async (req, res) => {
         const result = await UserService.loginUser(req.body);
         const { refresh_token, ...newResult } = result
         res.cookie('refresh_token', refresh_token, {
-            HttpOnly: true,
-            Secure: true,
+            httpOnly: true,
+            secure: false,
+            samsite: 'strict'
         })
         return res.status(200).json(newResult);
     } catch (err) {
@@ -147,7 +148,19 @@ const refreshToken = async (req, res) => {
     }
 }
 
-
+const logoutUser = async (req, res) => {
+    try {
+        res.clearCookie('refresh_token')
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Logout successful'
+        });
+    } catch (err) {
+        return res.status(404).json({
+            message: err.message
+        });
+    }
+}
 
 module.exports = {
     createUser,
@@ -156,5 +169,6 @@ module.exports = {
     deleteUser,
     getAllUser,
     getDetailUser,
-    refreshToken
+    refreshToken,
+    logoutUser
 };

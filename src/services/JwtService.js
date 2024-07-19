@@ -29,11 +29,10 @@ const refreshTokenJwtService = (token) => {
                         message: 'The authentication'
                     })
                 }
-                const { payload } = user
                 const access_token = await generalAccessToken({
-                    id: payload?.id,
-                    MaNV: payload?.MaNV
-                });
+                    id: user?.id,
+                    MaNV: user?.MaNV
+                })
                 resolve({
                     status: 'OK',
                     message: 'Refresh token successful',
