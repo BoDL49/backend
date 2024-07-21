@@ -4,7 +4,7 @@ const DienvienSchema = new mongoose.Schema(
     {
         Id: { type: String, required: true },
         TenDienvien: { type: String, required: true },
-        MaPhim: { type: mongoose.Schema.Types.ObjectId, ref: 'Phim' },
+        MaPhim: { type: String },
     },
     {
         timestamps: true,

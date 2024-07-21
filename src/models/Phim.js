@@ -7,7 +7,7 @@ const PhimSchema = new mongoose.Schema(
         Thoiluong: { type: Number, required: true },
         Daodien: { type: String, required: true },
         Ngaykhoichieu: { type: Date, required: true },
-        TheLoai: { type: mongoose.Schema.Types.ObjectId, ref: 'TheLoai' },
+        TheLoai: { type: String },
         Nuocsx: { type: String, required: true },
         Dotuoi: { type: String, required: true },
     },

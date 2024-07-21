@@ -3,10 +3,10 @@ const mongoose = require('mongoose')
 const VedadatSchema = new mongoose.Schema(
     {
         MaVe: { type: String, required: true },
-        MatK: { type: mongoose.Schema.Types.ObjectId, ref: 'Taikhoan' },
+        MatK: { type: String },
         Gia: { type: Number, required: true },
         Ngaydat: { type: Date, required: true },
-        ManV: { type: mongoose.Schema.Types.ObjectId, ref: 'Nhanvien' },
+        ManV: { type: String },
         Ghe: { type: String, required: true },
     },
     {
