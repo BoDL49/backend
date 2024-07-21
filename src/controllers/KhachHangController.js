@@ -13,11 +13,6 @@ const createKhachhang = async (req, res) => {
                 status: 'ERR',
                 message: 'The phone number must be 10 or 11 characters'
             });
-        } else if (GioiTinh !== 'Nam' && GioiTinh !== 'Nữ') {
-            return res.status(200).json({
-                status: 'ERR',
-                message: 'Gioi tinh phai la Nam hoac Nu'
-            });
         }
 
         const today = new Date();
@@ -29,10 +24,10 @@ const createKhachhang = async (req, res) => {
         }
 
         if (age < 18) {
-            return {
+            return res.status(200).json({
                 status: 'ERR',
                 message: 'Ngay sinh phai lon hon hoac bang 18 tuoi'
-            };
+            });
         }
 
         const result = await KhachHangService.createKhachHang(req.body);
@@ -44,14 +39,15 @@ const createKhachhang = async (req, res) => {
 
 const updateKhachhang = async (req, res) => {
     try {
-        const khachhangId = req.params.id
-        const data = req.body
-        if (!nhanvienId) {
+        const khachhangId = req.params.id;
+        const data = req.body;
+        if (!khachhangId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The khachhangId is required'
-            })
+            });
         }
+
         const result = await KhachHangService.updateKhachHang(khachhangId, data);
         return res.status(200).json(result);
     } catch (err) {
@@ -63,12 +59,12 @@ const updateKhachhang = async (req, res) => {
 
 const deleteKhachhang = async (req, res) => {
     try {
-        const khachhangId = req.params.id
+        const khachhangId = req.params.id;
         if (!khachhangId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The khachhangId is required'
-            })
+            });
         }
         const result = await KhachHangService.deleteKhachHang(khachhangId);
         return res.status(200).json(result);
@@ -79,17 +75,16 @@ const deleteKhachhang = async (req, res) => {
     }
 };
 
-
 const getDetailKhachhang = async (req, res) => {
     try {
-        const khachhangId = req.params.id
-        if (!khachhangId) {
+        const { Matk } = req.params;
+        if (!Matk) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The khachhangId is required'
-            })
+                message: 'The Matk is required'
+            });
         }
-        const result = await KhachHangService.getDetailKhachHang(khachhangId);
+        const result = await KhachHangService.getDetailKhachHang(Matk);
         return res.status(200).json(result);
     } catch (err) {
         return res.status(404).json({
@@ -108,7 +103,6 @@ const getAllKhachhang = async (req, res) => {
         });
     }
 };
-
 
 module.exports = {
     createKhachhang,

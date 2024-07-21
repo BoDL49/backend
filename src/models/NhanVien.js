@@ -9,7 +9,7 @@ const NhanvienSchema = new mongoose.Schema(
         Chucvu: { type: String, required: true },
         GioiTinh: { type: String, required: true },
         NgaySinh: { type: Date, required: true },
-        Matk: { type: mongoose.Schema.Types.ObjectId, ref: 'Taikhoan' }
+        Matk: { type: String }
     },
     {
         timestamps: true,

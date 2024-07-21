@@ -1,143 +1,139 @@
-const KhachHang = require('../models/KhachHang');
-const UserService = require('../services/UserService');
+const Khachhang = require('../models/KhachHang');
+const KhachHangModel = require('../models/KhachHang');
 const TaiKhoan = require('../models/TaiKhoan');
 
 const createKhachHang = async (newKhachHang) => {
     const { TenKH, SoDT, Ngaysinh, Gioitinh, Matk } = newKhachHang;
     try {
-        const taiKhoan = await TaiKhoan.findOne({ Matk: Matk })
+        const taiKhoan = await TaiKhoan.findOne({ Matk: Matk });
         if (!taiKhoan) {
             return {
-                status: 'ERR',
+                status: 'OK',
                 message: 'TaiKhoan not found'
             };
         }
 
-        const checkKhachHang = await KhachHang.findOne({ Matk: taiKhoan._id })
+        const checkKhachHang = await KhachHangModel.findOne({ Matk: Matk });
         if (checkKhachHang !== null) {
             return {
-                status: 'ERR',
+                status: 'OK',
                 message: 'KhachHang is already taken'
             };
         }
 
-        const createKhachHang = await KhachHang.create({
+        const createdKhachHang = await KhachHangModel.create({
             TenKH,
             SoDT,
             Ngaysinh,
             Gioitinh,
-            Matk: taiKhoan._id
+            Matk: Matk
         });
 
-        if (createKhachHang) {
+        if (createdKhachHang) {
             return {
                 status: 'OK',
                 message: 'KhachHang created successfully',
-                data: createKhachHang
-            }
+                data: createdKhachHang
+            };
         }
-    }
-    catch (err) {
+    } catch (err) {
         return {
             status: 'ERR',
             message: err.message
-        }
+        };
     }
 };
 
-
-const updateKhachHang = (id, data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const checkKhachHang = await KhachHang.findOne({ _id: id })
-
-            if (checkKhachHang === null) {
-                resolve({
-                    status: "OK",
-                    message: 'KhachHang is not defined'
-                });
-            }
-
-            const updatedKhachHang = await KhachHang.findByIdAndUpdate(id, data, { new: true })
-
-
-            resolve({
-                status: 'OK',
-                message: 'SUCCESS',
-                data: updatedKhachHang
-            });
-        } catch (err) {
-            reject(err);
+const updateKhachHang = async (id, data) => {
+    try {
+        const checkKhachHang = await KhachHangModel.findOne({ _id: id });
+        if (checkKhachHang === null) {
+            return {
+                status: "OK",
+                message: 'KhachHang is not defined'
+            };
         }
-    });
+
+        const updatedKhachHang = await KhachHangModel.findByIdAndUpdate(id, data, { new: true });
+
+        return {
+            status: 'OK',
+            message: 'SUCCESS',
+            data: updatedKhachHang
+        };
+    } catch (err) {
+        return {
+            status: 'ERR',
+            message: err.message
+        };
+    }
 };
 
-const deleteKhachHang = (id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const checkKhachHang = await KhachHang.findOne({ _id: id });
+const deleteKhachHang = async (id) => {
+    try {
+        const checkKhachHang = await KhachHangModel.findOne({ _id: id });
 
-            if (checkKhachHang === null) {
-                resolve({
-                    status: "OK",
-                    message: 'KhachHang is not defined'
-                });
-            }
-
-            await KhachHang.findByIdAndDelete(id)
-
-
-            resolve({
-                status: 'OK',
-                message: 'DELETE KHACHHANG SUCCESS'
-            });
-        } catch (err) {
-            reject(err);
+        if (checkKhachHang === null) {
+            return {
+                status: "OK",
+                message: 'KhachHang is not defined'
+            };
         }
-    });
+
+        await KhachHangModel.findByIdAndDelete(id);
+
+        return {
+            status: 'OK',
+            message: 'DELETE KHACHHANG SUCCESS'
+        };
+    } catch (err) {
+        return {
+            status: 'ERR',
+            message: err.message
+        };
+    }
 };
 
 const getAllKhachHang = async () => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const AllKhachHang = await KhachHang.find()
+    try {
+        const allKhachHang = await KhachHangModel.find();
 
-
-            resolve({
-                status: 'OK',
-                message: 'GET ALL USER SUCCESS',
-                data: AllKhachHang
-            });
-        } catch (err) {
-            reject(err);
-        }
-    });
+        return {
+            status: 'OK',
+            message: 'GET ALL KhachHang SUCCESS',
+            data: allKhachHang
+        };
+    } catch (err) {
+        return {
+            status: 'ERR',
+            message: err.message
+        };
+    }
 };
 
-const getDetailKhachHang = async (id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const KhachHang = await KhachHang.findOne({ _id: id });
+const getDetailKhachHang = async (Matk) => {
+    try {
+        const khachHang = await KhachHangModel.findOne({ Matk: Matk });
 
-            if (KhachHang === null) {
-                resolve({
-                    status: "OK",
-                    message: 'KhachHang is not defined'
-                });
-            }
-
-            resolve({
-                status: 'OK',
-                message: 'SUCCESS',
-                data: KhachHang
-            });
-        } catch (err) {
-            reject(err);
+        if (khachHang === null) {
+            return {
+                status: "OK",
+                message: 'KhachHang is not defined'
+            };
         }
-    });
+
+        return {
+            status: 'OK',
+            message: 'SUCCESS',
+            data: khachHang
+        };
+    } catch (err) {
+        return {
+            status: 'ERR',
+            message: err.message
+        };
+    }
 };
-
-
 
 module.exports = {
     createKhachHang,

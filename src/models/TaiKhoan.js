@@ -6,7 +6,7 @@ const TaikhoanSchema = new mongoose.Schema(
         Tentk: { type: String, required: true },
         Email: { type: String, required: true },
         Matkhau: { type: String, required: true },
-        MaNV: { type: mongoose.Schema.Types.ObjectId, ref: 'Nhanvien' }
+        MaNV: { type: String }
     },
     {
         timestamps: true,

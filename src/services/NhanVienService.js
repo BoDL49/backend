@@ -13,7 +13,7 @@ const createNhanVien = async (newNhanVien) => {
             };
         }
 
-        const checkNhanvien = await NhanVien.findOne({ Matk: taiKhoan._id })
+        const checkNhanvien = await NhanVien.findOne({ Matk: taiKhoan.Matk })
         if (checkNhanvien !== null) {
             return {
                 status: 'ERR',
@@ -28,10 +28,10 @@ const createNhanVien = async (newNhanVien) => {
             Chucvu,
             GioiTinh,
             NgaySinh,
-            Matk: taiKhoan._id
+            Matk
         });
 
-        const updateTaiKhoan = await UserService.updateUser(taiKhoan._id, { MaNV: createNhanvien._id });
+        const updateTaiKhoan = await UserService.updateUser(taiKhoan._id, { MaNV: createNhanvien.MaNV });
 
         if (createNhanvien && updateTaiKhoan.status === 'OK') {
             return {
