@@ -1,14 +1,28 @@
 const mongoose = require('mongoose');
 
-const TheloaiSchema = new mongoose.Schema(
+const TheLoaiSchema = new mongoose.Schema(
     {
-        MatL: { type: String, required: true },
-        TentL: { type: String, required: true },
+        MaTL: { type: String, required: true, unique: true },
+        TenTL: { type: String, required: true },
     },
     {
         timestamps: true,
     }
 );
 
-const Theloai = mongoose.model('Theloai', TheloaiSchema);
-module.exports = Theloai;
+TheLoaiSchema.pre('save', async function (next) {
+    const lastTheLoai = await TheLoai.findOne({}, {}, { sort: { 'MaTL': -1 } });
+
+    if (lastTheLoai) {
+        const lastMaTL = lastTheLoai.MaTL;
+        const lastNumber = parseInt(lastMaTL.substring(2));
+        this.MaTL = 'TL' + (lastNumber + 1).toString().padStart(2, '0');
+    } else {
+        this.MaTL = 'TL01';
+    }
+
+    next();
+});
+
+const TheLoai = mongoose.model('Theloai', TheLoaiSchema);
+module.exports = TheLoai;
